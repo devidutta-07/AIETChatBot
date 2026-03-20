@@ -8,6 +8,7 @@ from langchain_pinecone import PineconeVectorStore
 
 load_dotenv()
 
+# Load models once
 model = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash-lite"
 )
@@ -18,16 +19,11 @@ embedding = MistralAIEmbeddings(
 )
 
 prompt = ChatPromptTemplate([
-    ("system", """You are a helpfull document-based AI assistant.
+    ("system", """You are a helpful AI assistant.
 
-You MUST answer ONLY from the provided context.
+Answer ONLY using provided context.
 
-Rules:
-1. Use ONLY the given context to answer.
-2. If the answer is NOT present in the context, reply exactly with: "NO DATA".
-2. Do NOT use your own knowledge.
-3. Do NOT guess or assume.
-4. Keep answers concise and accurate.
+If answer not found → reply "NO DATA".
 
 Context:
 {context}
@@ -43,16 +39,15 @@ vectordb = PineconeVectorStore(
 
 retriever = vectordb.as_retriever(
     search_type="mmr",
-    search_kwargs={"k": 3, "fetch_k": 10}
+    search_kwargs={"k": 5, "fetch_k": 20}
 )
 
-while True:
-    query = input("Ask Question from the document: ")
-
-    if query == "0":
-        break
-    query = query.lower().strip()
+def ask_question(query):
     docs = retriever.invoke(query)
+
+    if not docs:
+        return "NO DATA"
+
     context = "\n\n".join([doc.page_content for doc in docs])
 
     final_prompt = prompt.invoke({
@@ -61,4 +56,5 @@ while True:
     })
 
     response = model.invoke(final_prompt)
-    print(response.content)
+
+    return response.content
