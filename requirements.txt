@@ -72,7 +72,8 @@ langchain-google==0.1.1
 langchain-google-genai==4.2.1
 langchain-mistralai==1.1.2
 langchain-openai==1.1.11
-langchain-pinecone==0.2.13
+# `langchain-pinecone` 0.2.13 is not available on PyPI currently; use the available version.
+langchain-pinecone==0.0.1
 langchain-text-splitters==1.1.1
 langdetect==1.0.9
 langgraph==1.1.3
