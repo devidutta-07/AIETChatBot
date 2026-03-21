@@ -28,7 +28,9 @@ docx==0.2.4
 dotenv==0.9.9
 durationpy==0.10
 emoji==2.15.0
-en-core-web-sm==3.8.0
+# spaCy model packages are released as wheels from Explosion, not on main PyPI index.
+# Use the direct release URL for en_core_web_sm 3.8.0 (or bump to a newer model as needed):
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
 filelock==3.25.2
 filetype==1.2.0
 flask==3.1.3
